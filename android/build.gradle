@@ -21,5 +21,6 @@ android {
 
 dependencies {
     compile 'com.facebook.react:react-native:0.20.+'
+    compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
+    compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.2.+'
 }
-  

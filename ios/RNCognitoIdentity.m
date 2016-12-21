@@ -48,7 +48,7 @@ RCT_EXPORT_METHOD(signUp:(NSString *)email
     
     //start a separate thread for this to avoid blocking the component queue, since
     //it will have to comunicate with the javascript in the mean time while trying to signup
-    NSString* queueName = [NSString stringWithFormat:@"%@.signUpAsyncQueue",
+    NSString* queueName = [NSString stringWithFormat:@"%@.signUpQueue",
                            [NSString stringWithUTF8String:dispatch_queue_get_label(self.methodQueue)]
                            ];
     dispatch_queue_t concurrentQueue = dispatch_queue_create([queueName UTF8String], DISPATCH_QUEUE_CONCURRENT);
@@ -77,7 +77,7 @@ RCT_EXPORT_METHOD(signUp:(NSString *)email
 // - (AWSTask<AWSCognitoIdentityUserConfirmSignUpResponse *> *)confirmSignUp:(NSString *)confirmationCode;
 
 RCT_EXPORT_METHOD(confirmSignUp:(NSString *)newEmail confirmationCode:(NSString *)confirmationCode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    NSString* queueName = [NSString stringWithFormat:@"%@.authenticateAsyncQueue",
+    NSString* queueName = [NSString stringWithFormat:@"%@.confirmSignUpQueue",
                            [NSString stringWithUTF8String:dispatch_queue_get_label(self.methodQueue)]
                            ];
     dispatch_queue_t concurrentQueue = dispatch_queue_create([queueName UTF8String], DISPATCH_QUEUE_CONCURRENT);
@@ -105,11 +105,11 @@ RCT_EXPORT_METHOD(confirmSignUp:(NSString *)newEmail confirmationCode:(NSString 
     });
 }
 
-RCT_EXPORT_METHOD(authenticateUserAsync:(NSString *)newEmail password:(NSString *)newPassword resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(getSession:(NSString *)newEmail password:(NSString *)newPassword resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
     
     //start a separate thread for this to avoid blocking the component queue, since
     //it will have to comunicate with the javascript in the mean time while trying to get the list of logins
-    NSString* queueName = [NSString stringWithFormat:@"%@.authenticateAsyncQueue",
+    NSString* queueName = [NSString stringWithFormat:@"%@.getSessionQueue",
                            [NSString stringWithUTF8String:dispatch_queue_get_label(self.methodQueue)]
                            ];
     dispatch_queue_t concurrentQueue = dispatch_queue_create([queueName UTF8String], DISPATCH_QUEUE_CONCURRENT);
@@ -129,13 +129,7 @@ RCT_EXPORT_METHOD(authenticateUserAsync:(NSString *)newEmail password:(NSString 
                 reject([NSString stringWithFormat:@"%ld",task.error.code],task.error.description,task.error);
             }
             else {
-                NSLog(@"authentication succesful");
-                NSLog(@"Result from 'getSession': %@", task.result);
                 AWSCognitoIdentityUserSession *session = (AWSCognitoIdentityUserSession *)task.result;
-                NSLog(@"'session idToken': %@", session.idToken.tokenString);
-                NSLog(@"'session accessToken': %@", session.accessToken.tokenString);
-                NSLog(@"'session refreshToken': %@", session.refreshToken.tokenString);
-                NSLog(@"'session expirationTime': %@", session.expirationTime);
                 NSString* dateAsISO8601String = [[self dateFormatterISO8601] stringFromDate:session.expirationTime];
                 
                 NSDictionary *dict = @{
@@ -152,7 +146,7 @@ RCT_EXPORT_METHOD(authenticateUserAsync:(NSString *)newEmail password:(NSString 
 }
 
 RCT_EXPORT_METHOD(forgotPassword:(NSString *)newEmail resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    NSString* queueName = [NSString stringWithFormat:@"%@.authenticateAsyncQueue",
+    NSString* queueName = [NSString stringWithFormat:@"%@.forgotPasswordQueue",
                            [NSString stringWithUTF8String:dispatch_queue_get_label(self.methodQueue)]
                            ];
     dispatch_queue_t concurrentQueue = dispatch_queue_create([queueName UTF8String], DISPATCH_QUEUE_CONCURRENT);
@@ -184,7 +178,7 @@ RCT_EXPORT_METHOD(forgotPassword:(NSString *)newEmail resolver:(RCTPromiseResolv
 // - (AWSTask<AWSCognitoIdentityUserConfirmForgotPasswordResponse *> *)confirmForgotPassword:(NSString *)confirmationCode
 // password:(NSString *)password;
 RCT_EXPORT_METHOD(confirmForgotPassword:(NSString *)newEmail password:(NSString *)newPassword confirmationCode:(NSString *)confirmationCode resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    NSString* queueName = [NSString stringWithFormat:@"%@.authenticateAsyncQueue",
+    NSString* queueName = [NSString stringWithFormat:@"%@.confirmForgotPasswordAsyncQueue",
                            [NSString stringWithUTF8String:dispatch_queue_get_label(self.methodQueue)]
                            ];
     dispatch_queue_t concurrentQueue = dispatch_queue_create([queueName UTF8String], DISPATCH_QUEUE_CONCURRENT);
