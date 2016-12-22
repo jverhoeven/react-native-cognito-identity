@@ -17,6 +17,8 @@ Limitations:
 1. You need to store the password on the client. Currently the refresh token is not used to get new session tokens.
 2. It assumes the e-mail address is the username.
 3. Not all functionality is implemented, e.g. you cannot change the e-mail address after signup.
+4. No tests.
+5. Android only does region EU-WEST-1
 
 ## Getting started
 
@@ -64,4 +66,5 @@ This is a minimal implementation that satisfies my own applications. Obviously y
 
 1. Implement the full interface
 2. (Automatically) refresh the session tokens using the refreshToken, so you don't have to store the password.
+3. Write tests.
 
