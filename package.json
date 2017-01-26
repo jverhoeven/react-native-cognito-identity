@@ -1,7 +1,7 @@
 
 {
   "name": "react-native-cognito-identity",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A stopgap solution until Amazon releases a complete React-Native SDK",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,6 @@
   "author": "Jan Verhoeven",
   "license": "Apache License 2.0 (Alike AWS React-Native SDK)",
   "peerDependencies": {
-    "react-native": "^0.29.0"
+    "react-native": "^0.40.0"
   }
 }
